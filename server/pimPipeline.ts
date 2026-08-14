@@ -161,12 +161,10 @@ function resolveManufacturer(input: RawProductInput, description: string) {
     brandCode: resolved?.brandCode ?? null,
     method,
     score: resolved ? winner.score : 0,
-    candidates: candidates
-      .slice(0, 3)
-      .map(candidate => ({
-        name: candidate.entry.canonical,
-        score: candidate.score,
-      })),
+    candidates: candidates.slice(0, 3).map(candidate => ({
+      name: candidate.entry.canonical,
+      score: candidate.score,
+    })),
     requiresReview: method === "fuzzy" || method === "unresolved",
     rationale:
       method === "unresolved"
@@ -424,7 +422,7 @@ function parseAttributes(
       makeAttribute(
         "intendedUse",
         intendedUse,
-        null,
+        intendedUse,
         null,
         true,
         87,

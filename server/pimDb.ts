@@ -12,8 +12,13 @@ import {
 import type {
   BatchMetrics,
   EnrichedProductRecord,
+  ProductAttribute,
   RawProductInput,
 } from "../shared/pim";
+import {
+  UNIHACK_DELIVERY_HEADERS,
+  type UnihackDeliveryRow,
+} from "../shared/unihackDelivery";
 import { getDb } from "./db";
 import { buildDescriptions, enrichRecord, getInputHash } from "./pimPipeline";
 
@@ -391,6 +396,152 @@ export async function exportBatch(batchId: string) {
   const attributes = await db.select().from(productAttributes);
   const issues = await db.select().from(validationIssues);
   return serializeExportRows(records, attributes, issues);
+}
+
+const attributeExportOrder = [
+  "productType",
+  "productLine",
+  "dimensions",
+  "grit",
+  "packQuantity",
+  "abrasiveMaterial",
+  "intendedUse",
+];
+
+function asProductAttributes(
+  attributes: Array<typeof productAttributes.$inferSelect>
+): ProductAttribute[] {
+  return attributes.map(attribute => ({
+    fieldKey: attribute.fieldKey,
+    label: attribute.label,
+    rawValue: attribute.rawValue,
+    normalizedValue: attribute.normalizedValue,
+    unit: attribute.unit,
+    isValidated: attribute.isValidated,
+    lovMatch: attribute.lovMatch,
+    confidence: attribute.confidence,
+    state: attribute.fieldState,
+    evidence: {
+      sourceType:
+        attribute.evidenceSourceType as ProductAttribute["evidence"]["sourceType"],
+      sourceRef: attribute.sourceRef,
+      excerpt: attribute.excerpt ?? "",
+      method: attribute.extractionMethod,
+      sourceUrl: attribute.sourceUrl,
+    },
+  }));
+}
+
+function splitDimensionValue(value: string | null) {
+  const match = value?.match(
+    /^(.+?)\s+(in|mm)\s+x\s+(.+?)\s+(in|mm)(?:\s+x\s+(.+?)\s+(in|mm))?$/i
+  );
+  if (!match) return [];
+  return [
+    { value: match[1], unit: match[2] },
+    { value: match[3], unit: match[4] },
+    ...(match[5] && match[6] ? [{ value: match[5], unit: match[6] }] : []),
+  ];
+}
+
+export function serializeUnihackDeliveryRows(
+  records: Array<typeof productRecords.$inferSelect>,
+  allAttributes: Array<typeof productAttributes.$inferSelect>
+): UnihackDeliveryRow[] {
+  return records.map(record => {
+    const row = Object.fromEntries(
+      UNIHACK_DELIVERY_HEADERS.map(header => [header, ""])
+    ) as UnihackDeliveryRow;
+    const attributes = allAttributes
+      .filter(
+        attribute =>
+          attribute.productRecordId === record.id &&
+          attribute.isValidated &&
+          attribute.fieldState !== "flagged"
+      )
+      .sort(
+        (left, right) =>
+          attributeExportOrder.indexOf(left.fieldKey) -
+          attributeExportOrder.indexOf(right.fieldKey)
+      );
+    const productAttributesForDescription = asProductAttributes(attributes);
+    const descriptions = buildDescriptions(
+      record.mfgPartNum,
+      record.brand,
+      productAttributesForDescription
+    );
+    const valueFor = (fieldKey: string) =>
+      attributes.find(attribute => attribute.fieldKey === fieldKey)
+        ?.normalizedValue ?? "";
+    const dimensions = splitDimensionValue(valueFor("dimensions"));
+    const packQuantity = valueFor("packQuantity").match(/^(\d+)\s*(.*)$/);
+    const categoryParts = (record.classpath ?? "")
+      .split(">")
+      .map(value => value.trim());
+    const sourceUrls = attributes
+      .map(attribute => attribute.sourceUrl)
+      .filter((url): url is string => Boolean(url))
+      .filter((url, index, urls) => urls.indexOf(url) === index);
+
+    row["MFR URL"] = sourceUrls[0] ?? "";
+    sourceUrls.slice(1, 6).forEach((url, index) => {
+      row[`Ref URL ${index + 1}`] = url;
+    });
+    row["PART_NUMBER"] = record.mfgPartNum ?? "";
+    row.Dept = categoryParts[0] ?? "";
+    row.Class = categoryParts[1] ?? "";
+    row.Fine = categoryParts[2] ?? "";
+    row["SKU - MY_PART_NUMBER"] = record.mfgPartNum ?? "";
+    row.Mfg_Part_Num = record.mfgPartNum ?? "";
+    row.Part_Desc = record.rawDescription;
+    row.E1_Brand = record.rawE1Brand ?? "";
+    row.Unilog_Brand = record.rawUnilogBrand ?? "";
+    row.DIB_Brand = record.rawDibBrand ?? "";
+    row.Part_Manuf = record.rawManufacturer ?? "";
+    row.MANUFACTURER_NAME = record.manufacturer ?? "";
+    row.BRAND_NAME = record.brand ?? "";
+    row.TRADE_NAME = valueFor("productLine");
+    row.MANUFACTURER_PART_NUMBER = record.mfgPartNum ?? "";
+    row.Classpath = record.classpath ?? "";
+    row.MOBILE_DESC = descriptions.mobileDescription;
+    row.INVOICE_DESC = descriptions.invoiceDescription;
+    row.SHORT_DESC = descriptions.shortDescription;
+    row.LONG_DESC1 = descriptions.longDescription;
+    row.RETAIL_DESC = descriptions.shortDescription;
+    row.MARKETING_DESCRIPTION = descriptions.longDescription;
+    row.Application = valueFor("intendedUse");
+    row["Product Name"] = descriptions.productTitle;
+    row["Selling Qty"] = packQuantity?.[1] ?? "";
+    row["Selling UOM"] = packQuantity?.[2] ?? "";
+    row.LENGTH = dimensions[1]?.value ?? "";
+    row.LENGTH_UOM = dimensions[1]?.unit ?? "";
+    row.WIDTH = dimensions[0]?.value ?? "";
+    row.WIDTH_UOM = dimensions[0]?.unit ?? "";
+
+    attributes.slice(0, 20).forEach((attribute, index) => {
+      row[`ITEM_FEATURES_${index + 1}`] =
+        `${attribute.label}: ${attribute.normalizedValue ?? ""}`;
+    });
+    attributes.slice(0, 50).forEach((attribute, index) => {
+      const position = index + 1;
+      row[`ATTRIBUTE_LABEL ${position}`] = attribute.label;
+      row[`ATTRIBUTE_VALUE ${position}`] = attribute.normalizedValue ?? "";
+      row[`ATTRIBUTE_UOM ${position}`] = attribute.unit ?? "";
+    });
+    return row;
+  });
+}
+
+export async function exportUnihackDelivery(batchId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  const records = await db
+    .select()
+    .from(productRecords)
+    .where(eq(productRecords.batchId, batchId))
+    .orderBy(productRecords.sourceRow);
+  const attributes = await db.select().from(productAttributes);
+  return serializeUnihackDeliveryRows(records, attributes);
 }
 
 export async function reviewField(input: {

@@ -5,6 +5,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import {
   exportBatch,
+  exportUnihackDelivery,
   getLatestDashboard,
   getRecordDetail,
   processBatch,
@@ -56,6 +57,9 @@ export const appRouter = router({
     exportBatch: publicProcedure
       .input(z.object({ batchId: z.string().min(1) }))
       .query(({ input }) => exportBatch(input.batchId)),
+    exportUnihackDelivery: publicProcedure
+      .input(z.object({ batchId: z.string().min(1) }))
+      .query(({ input }) => exportUnihackDelivery(input.batchId)),
     reviewField: publicProcedure
       .input(
         z.object({

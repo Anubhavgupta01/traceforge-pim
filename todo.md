@@ -19,4 +19,8 @@
 - [x] Write unit and integration tests for placeholder cleaning, parser rules, normalization, validation, description constraints, confidence/review states, audit logging, and exports.
 - [x] Validate the full 1,000-row batch flow, examine interface screenshots at desktop and mobile sizes, and resolve observed defects.
 - [x] Write a concise README/runbook covering architecture, input/output contracts, source hierarchy, evaluation method, limitations, and live-demo instructions.
-
+- [x] Compare the supplied UniHack expected-output delivery-format headers against the current TraceForge export and document every mapping gap.
+- [x] Define a header-preserving UniHack delivery export, including blank/review policy for fields unsupported by the presently supplied reference data.
+- [x] Implement, test, and verify the exact expected-output CSV export without modifying required headers.
+- [x] Correct intended-use normalization so validated application values can safely populate the UniHack delivery export.
+- [x] Create a field-by-field UniHack delivery mapping document covering all 252 headers, marking each as mapped, intentionally blank, or unsupported/review-only with the source field or rationale.

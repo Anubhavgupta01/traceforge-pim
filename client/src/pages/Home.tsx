@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import type { EnrichedProductRecord, RawProductInput } from "@shared/pim";
+import { UNIHACK_DELIVERY_HEADERS } from "@shared/unihackDelivery";
 import {
   AlertCircle,
   ArrowDownToLine,
@@ -292,6 +293,10 @@ export default function Home() {
     { batchId: activeBatch?.id ?? "not-ready" },
     { enabled: false }
   );
+  const unihackDeliveryQuery = trpc.pim.exportUnihackDelivery.useQuery(
+    { batchId: activeBatch?.id ?? "not-ready" },
+    { enabled: false }
+  );
 
   const currentMetrics = dashboardQuery.data?.metrics;
   const records = dashboardQuery.data?.records ?? [];
@@ -450,6 +455,30 @@ export default function Home() {
         "text/csv"
       );
     }
+  };
+
+  const exportUnihackDelivery = async () => {
+    if (!activeBatch)
+      return toast.error(
+        "Process a batch before exporting the UniHack delivery file."
+      );
+    const result = await unihackDeliveryQuery.refetch();
+    const rows = result.data ?? [];
+    download(
+      "Unihack_ExpectedOutput-DeliveryFormat.csv",
+      [
+        UNIHACK_DELIVERY_HEADERS,
+        ...rows.map(row =>
+          UNIHACK_DELIVERY_HEADERS.map(header => row[header] ?? "")
+        ),
+      ]
+        .map(row => row.map(csvEscape).join(","))
+        .join("\n"),
+      "text/csv"
+    );
+    toast.success(
+      `Created a ${UNIHACK_DELIVERY_HEADERS.length}-column UniHack delivery file for ${rows.length.toLocaleString()} records.`
+    );
   };
 
   const detail = detailQuery.data;
@@ -1145,6 +1174,14 @@ export default function Home() {
                   >
                     <ArrowDownToLine className="mr-1.5 h-3.5 w-3.5" />
                     JSON
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="h-9 bg-slate-950 text-xs hover:bg-slate-800"
+                    onClick={() => void exportUnihackDelivery()}
+                  >
+                    <FileCheck2 className="mr-1.5 h-3.5 w-3.5" />
+                    UniHack Delivery CSV
                   </Button>
                 </div>
               </div>
