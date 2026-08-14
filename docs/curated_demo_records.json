@@ -1,0 +1,42 @@
+[
+  {
+    "source_row": 2,
+    "input": {
+      "Mfg_Part_Num": "DCB518ASTS06G",
+      "Part_Desc": "DCB518ASTS06G Diablo 1/2\"x18\" - Sanding Belt 6pc",
+      "Part_Manuf": "Freud Inc (2435)"
+    },
+    "grounded_labels": {
+      "canonical_manufacturer": "Freud, Inc.",
+      "brand": "Diablo®",
+      "product_type": "Sanding Belt",
+      "dimensions": "1/2 in x 18 in",
+      "pack_quantity": "6 EA",
+      "evidence_scope": "Exact-MPN manufacturer product page"
+    },
+    "source": {
+      "url": "https://diablotools.com/products/DCB518ASTS06G",
+      "excerpt": "Diablo identifies DCB518ASTS06G as a 1/2 in x 18 in detail file sanding belt assorted pack and lists pack quantity 6."
+    }
+  },
+  {
+    "source_row": 3,
+    "input": {
+      "Mfg_Part_Num": "3MABR-7100075678",
+      "Part_Desc": "3M 775L Stikit Film P150 - Cubitron II 50 Disc/Box",
+      "Part_Manuf": "Jam Industrial Supply LLC (JAMIN)"
+    },
+    "grounded_labels": {
+      "canonical_manufacturer": "3M",
+      "brand": "3M",
+      "product_type": "Abrasive Disc",
+      "product_line": "Cubitron II Stikit Film Disc 775L",
+      "grit_input_normalized": "P150",
+      "evidence_scope": "Manufacturer family-level corroboration; variant-specific claims remain input-derived"
+    },
+    "source": {
+      "url": "https://www.3m.com/3M/en_US/p/d/b40064963/",
+      "excerpt": "3M documents 775L as a film disc with Precision Shaped Ceramic abrasive and published grits including 150+."
+    }
+  }
+]

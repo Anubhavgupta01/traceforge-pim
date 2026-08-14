@@ -1,0 +1,167 @@
+{
+  "row_count": 1000,
+  "columns": [
+    "Mfg_Part_Num",
+    "Part_Desc",
+    "E1_Brand",
+    "Unilog_Brand",
+    "DIB_Brand",
+    "Part_Manuf"
+  ],
+  "placeholder_counts": {
+    "Mfg_Part_Num": 0,
+    "Part_Desc": 0,
+    "E1_Brand": 799,
+    "Unilog_Brand": 1000,
+    "DIB_Brand": 755,
+    "Part_Manuf": 0
+  },
+  "placeholder_rates": {
+    "Mfg_Part_Num": 0.0,
+    "Part_Desc": 0.0,
+    "E1_Brand": 79.9,
+    "Unilog_Brand": 100.0,
+    "DIB_Brand": 75.5,
+    "Part_Manuf": 0.0
+  },
+  "description_length": {
+    "min": 13,
+    "max": 70,
+    "average": 38.26
+  },
+  "top_manufacturers": [
+    {
+      "raw_value": "Phillips Lighting (5831)",
+      "count": 111
+    },
+    {
+      "raw_value": "Milwaukee Accessory (4031)",
+      "count": 108
+    },
+    {
+      "raw_value": "Boise Cascade Building Materials (BOICA)",
+      "count": 85
+    },
+    {
+      "raw_value": "Appliance Dealers Cooperative (APPDE)",
+      "count": 84
+    },
+    {
+      "raw_value": "Kichler Lighting (KICLI)",
+      "count": 56
+    },
+    {
+      "raw_value": "Parksite (6151)",
+      "count": 55
+    },
+    {
+      "raw_value": "Black & Decker/dewlt (2585)",
+      "count": 55
+    },
+    {
+      "raw_value": "Freud Inc (2435)",
+      "count": 46
+    },
+    {
+      "raw_value": "U S Lumber (3073)",
+      "count": 43
+    },
+    {
+      "raw_value": "-",
+      "count": 41
+    },
+    {
+      "raw_value": "Satco Prod Inc (5573)",
+      "count": 41
+    },
+    {
+      "raw_value": "Makita Usa Inc (5142)",
+      "count": 23
+    },
+    {
+      "raw_value": "Southwire/g Turner (6603)",
+      "count": 19
+    },
+    {
+      "raw_value": "Leviton Mfg Co (4927)",
+      "count": 17
+    },
+    {
+      "raw_value": "Festool USA (FESTO)",
+      "count": 16
+    }
+  ],
+  "pattern_counts": {
+    "mentions_disc": 45,
+    "mentions_belt": 2,
+    "mentions_grit": 8,
+    "mentions_dimensions": 150,
+    "mentions_pack_quantity": 28
+  },
+  "representative_rows": [
+    {
+      "Mfg_Part_Num": "DCB518ASTS06G",
+      "Part_Desc": "DCB518ASTS06G Diablo 1/2\"x18\" - Sanding Belt 6pc",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Freud Inc (2435)"
+    },
+    {
+      "Mfg_Part_Num": "3MABR-7100075678",
+      "Part_Desc": "3M 775L Stikit Film P150 - Cubitron II 50 Disc/Box",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Jam Industrial Supply LLC (JAMIN)"
+    },
+    {
+      "Mfg_Part_Num": "3MABR-7100045865",
+      "Part_Desc": "3M 775L Stikit Film P120 - Cubitron II 50 Disc/Box",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Jam Industrial Supply LLC (JAMIN)"
+    },
+    {
+      "Mfg_Part_Num": "3MABR-7100048736",
+      "Part_Desc": "3M 775L Stikit Film P80 - Cubitron II 50 Disc/Box",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Jam Industrial Supply LLC (JAMIN)"
+    },
+    {
+      "Mfg_Part_Num": "3MABR-7100075690",
+      "Part_Desc": "3M 775L Stikit Film P180 - Cubitron II 50 Disc/Box",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Jam Industrial Supply LLC (JAMIN)"
+    },
+    {
+      "Mfg_Part_Num": "3MABR-7100075692",
+      "Part_Desc": "3M 775L Stikit Film P220 - Cubitron II 50 Disc/Box",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Jam Industrial Supply LLC (JAMIN)"
+    },
+    {
+      "Mfg_Part_Num": "3MABR-7100145365",
+      "Part_Desc": "3M 775L Stikit Film P320 - Cubitron II 50 Disc/Box",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Jam Industrial Supply LLC (JAMIN)"
+    },
+    {
+      "Mfg_Part_Num": "5B-332-080",
+      "Part_Desc": "5B-332-080 HIOLIT 5\" P80",
+      "E1_Brand": "-- Unbranded --",
+      "Unilog_Brand": "-- No Unilog Brand --",
+      "DIB_Brand": "-- No DIB Brand --",
+      "Part_Manuf": "Mirka Abrasives Inc (MIRUS)"
+    }
+  ]
+}
